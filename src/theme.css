@@ -1,0 +1,89 @@
+/* =========================
+   OCP Branding Theme
+   ========================= */
+
+:root {
+  /* Brand Colors */
+  --color-blue: #2563eb;       /* Primary Blue */
+  --color-purple: #7c3aed;     /* Accent Purple */
+  --color-navy: #0f172a;       /* Dark Navy (text) */
+  --color-gray: #64748b;       /* Secondary text */
+  --color-white: #ffffff;      /* White */
+
+  /* Gradients */
+  --gradient-brand: linear-gradient(90deg, var(--color-blue), var(--color-purple));
+  --gradient-dark: linear-gradient(90deg, #1e3a8a, #9333ea);
+
+  /* Typography */
+  --font-primary: 'Montserrat', sans-serif;  /* Headings / Logo */
+  --font-secondary: 'Inter', sans-serif;     /* Body text */
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Inter:wght@400;500&display=swap');
+
+/* Body defaults */
+body {
+  font-family: var(--font-secondary);
+/*   background: var(--color-white); */
+/*   color: var(--color-navy); */
+  margin: 0;
+  padding: 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  color: #a8b8e0;
+  margin-bottom: 0.5rem;
+}
+
+/* Navbar */
+.navbar {
+  background: var(--gradient-brand);
+  color: var(--color-white);
+  padding: 1rem 2rem;
+}
+
+.navbar a {
+  color: var(--color-white);
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: 500;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+  background: var(--gradient-brand);
+  color: var(--color-white);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+.header {
+  background: var(--color-navy);
+  color: var(--color-gray);
+  text-align: center;
+  border-bottom-right-radius:10px;
+  border-bottom-left-radius:10px;
+}
+/* Footer */
+.footer {
+  background: var(--color-navy);
+  color: var(--color-gray);
+  text-align: center;
+  padding: 0.5rem;
+  border-top-right-radius:10px;
+  border-top-left-radius:10px;
+}
