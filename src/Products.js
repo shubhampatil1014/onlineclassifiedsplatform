@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 function Products() {
 
     const [products, setProducts] = useState([]);
-    const [favImage, setFavImage] = useState("unliked.png");
     // const [productsByLocation, setProductsByLocation] = useState([]);
     // const [productsByCategory, setProductsByCategory] = useState([]);
     // const [productsByKeyword, setProductsByKeyword] = useState([]);
@@ -120,7 +119,7 @@ function Products() {
                                 <button value='owner' title='Owner Information'>MORE INFO.</button>
                             </a>
                             <button id='fav' value='favorite' title='add to favorites' onClick={() => addToFavourite(product.productId)}>
-                                <img id={`favourite${product.productId}`} className={`favourite${product.productId}`} src={`images/${favImage}`} alt='favorite' width='16' height='16' />
+                                <img id={`favourite${product.productId}`} className={`favourite${product.productId}`} src={`images/unliked.png`} alt='favorite' width='16' height='16' />
                             </button>
                         </div>
                     </div>

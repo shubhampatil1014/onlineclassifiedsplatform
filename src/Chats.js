@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { getChats } from "./api/Api";
+import { useLocation } from "react-router-dom";
 
 export default function Chats() {
 
-    const [chats,setChats] = useState([]);
+    const [chats, setChats] = useState([]);
+    const [ownerName,setOwnerName] = useState("");
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
 
     useEffect(() => {
         const getChatsForUser = async () => {
@@ -11,20 +16,26 @@ export default function Chats() {
             setChats(userChats);
         }
         getChatsForUser();
-    },[]);
+
+        const OwnerId = queryParams.get("ownerId");
+        const OwnerName = queryParams.get("name");
+        if (OwnerId && OwnerName) {
+            setOwnerName(OwnerName);
+            openChat(OwnerId,OwnerName);
+        }
+    }, []);
 
     const sendMessage = function () {
 
     }
 
-    const openChat = async () => {
-
+    const openChat = async (OwnerId,OwnerName) => {
     }
 
     return (
         <>
             <style>
-            {`
+                {`
                 .chat-container {
                     display: flex;
                     height: 500px;
@@ -183,17 +194,34 @@ export default function Chats() {
                     <div className="chat-inbox">
                         <h3>Inbox</h3>
                         <ul id="chatList">
-                            {chats.length > 0 && chats.map((chat) => {
-                                {chat.isSet === "Y" ? 
-                                <li id={`user${chat.to}`} onClick={() => openChat(chat.to,chat.senderName)}>chat.senderName</li> : 
-                                <li id={`user${chat.from}`} onClick={() => openChat(chat.from,chat.senderName)}>chat.senderName</li>}
-                            })}
+                            {chats.length > 0 &&
+                                chats.map((chat) =>
+                                    chat.isSet === "Y" ? (
+                                        <li
+                                            key={chat.to}
+                                            id={`user${chat.to}`}
+                                            onClick={() => openChat(chat.to, chat.senderName)}
+                                        >
+                                            {chat.senderName}
+                                        </li>
+                                    ) : (
+                                        <li
+                                            key={chat.from}
+                                            id={`user${chat.from}`}
+                                            onClick={() => openChat(chat.from, chat.senderName)}
+                                        >
+                                            {chat.senderName}
+                                        </li>
+                                    )
+                                )
+                            }
+
                         </ul>
                     </div>
 
                     <div className="chat-panel">
-                        <div className="chat-header" id="chatHeader">Select a
-                            conversation</div>
+                        <div className="chat-header" id="chatHeader">{ownerName ? ownerName : `Select a
+                            conversation`}</div>
                         <div className="chat-body" id="chatMessages">
                         </div>
                         <div className="chat-footer">
