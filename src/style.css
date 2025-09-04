@@ -185,6 +185,7 @@ a{
 }
 #profile-icon > div{
 	float:left;
+	width: 60px;
 }
 #label{
 	float:left;
@@ -221,6 +222,9 @@ a{
 	
 }
 
+.dropdown div a{
+	display: contents;
+}
 
 
 /*			-------									main			      	-------						*/

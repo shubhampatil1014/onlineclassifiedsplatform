@@ -12,6 +12,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Logout from './Logout';
+import Favourites from './Favourites';
+import Chats from './Chats';
+import EditProfile from './EditProfile';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,7 +27,11 @@ root.render(
 				<Routes>
 					<Route path="/" element={<Products />} />
 					<Route path="/index" element={<Products />} />
+					<Route path="/index/*" element={<Products />} />
 					<Route path="/product/:productId" element={<Product />} />
+					<Route path='/favourites' element={<Favourites/>}/>
+					<Route path='/chats' element={<Chats/>}/>
+					<Route path='/edit-profile' element={<EditProfile/>}/>
 				</Routes>
 				<Footer />
 			</div>

@@ -9,23 +9,23 @@ return (<div className="footer" id="footer"><footer>
 			<p>Subscribe to our newsletter to get updates about our grand offers.</p>
 			<div style={{ margin: "0 20px" }}>
 				<div className="social-apps">
-					<a href="https://www.facebook.com" target="_blank"><img src="/images/fb.png"
+					<a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/fb.png"
 							alt="fb" /></a>
 				</div>
 				<div className="social-apps">
-					<a href="https://www.twitter.com" target="_blank"><img src="/images/twitter.png"
+					<a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"><img src="/images/twitter.png"
 							alt="twitter" /></a>
 				</div>
 				<div className="social-apps">
-					<a href="https://www.pinterest.com" target="_blank"><img src="/images/pinterest.png"
+					<a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer"><img src="/images/pinterest.png"
 							alt="pinterest" width="16" height="16" /></a>
 				</div>
 				<div className="social-apps">
-					<a href="https://www.instagram.com" target="_blank"><img src="/images/insta.png"
+					<a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img src="/images/insta.png"
 							alt="insta" /></a>
 				</div>
 				<div className="social-apps">
-					<a href="https://www.youtube.com" target="_blank"><img src="/images/yt.png"
+					<a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img src="/images/yt.png"
 							alt="youtube" /></a>
 				</div>
 			</div>
@@ -39,11 +39,11 @@ return (<div className="footer" id="footer"><footer>
 		</div>
 		<div>
 			<ul type="none">
-				<li><a href="#">Home</a></li>
-				<li><a href="#">About Us</a></li>
-				<li><a href="#">Offer</a></li>
-				<li><a href="#">Services</a></li>
-				<li><a href="#">Contact Us</a></li>
+				<li><a href="?home">Home</a></li>
+				<li><a href="/aboutus">About Us</a></li>
+				<li><a href="/offer">Offer</a></li>
+				<li><a href="/services">Services</a></li>
+				<li><a href="contactus">Contact Us</a></li>
 			</ul>
 		</div>
 	</div>
@@ -53,11 +53,11 @@ return (<div className="footer" id="footer"><footer>
 		</div>
 		<div>
 			<ul type="none">
-				<li><a href="#">FAQs</a></li>
-				<li><a href="#">Payments</a></li>
-				<li><a href="#">Returns & Refunds</a></li>
-				<li><a href="#">Checkout</a></li>
-				<li><a href="#">Delivery Information</a></li>
+				<li><a href="/faqs">FAQs</a></li>
+				<li><a href="/payments">Payments</a></li>
+				<li><a href="/returns-refunds">Returns & Refunds</a></li>
+				<li><a href="/checkout">Checkout</a></li>
+				<li><a href="deliveryinfo">Delivery Information</a></li>
 			</ul>
 		</div>
 	</div>
@@ -69,7 +69,7 @@ return (<div className="footer" id="footer"><footer>
 			<p>Subscribe to our newsletter to get updates about our grand offers.</p>
 			<div>
 				<input type="text" name="telegram"/>
-				<a href="#"><img id="tele" src="/images/telegram.png" alt="telegram" width="32"
+				<a href="/telegram"><img id="tele" src="/images/telegram.png" alt="telegram" width="32"
 						height="32" /></a>
 			</div>
 		</div>

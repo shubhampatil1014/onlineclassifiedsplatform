@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 function Products() {
 
     const [products, setProducts] = useState([]);
-    const [productsByLocation, setProductsByLocation] = useState([]);
-    const [productsByCategory, setProductsByCategory] = useState([]);
-    const [productsByKeyword, setProductsByKeyword] = useState([]);
+    // const [productsByLocation, setProductsByLocation] = useState([]);
+    // const [productsByCategory, setProductsByCategory] = useState([]);
+    // const [productsByKeyword, setProductsByKeyword] = useState([]);
 
     useEffect(() => {
         // ✅ this runs once when component loads (like document.onload)
@@ -101,7 +101,7 @@ function Products() {
                         }}></div>
                     </Link>
                     <div className='pro-info'>
-                        <a href='#'><label>{product.title}</label></a><br />
+                        <label>{product.title}</label><br />
                         {product.description}<br />
                         <span className='price'>Rs. {product.price}</span>
                     </div>

@@ -1,10 +1,11 @@
-import { useState , useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import logo from "./images/logo_7.png";
 import searchImg from "./images/search.png";
 import './theme.css';
-import { getAllCateories, getProductsByKeyword , getLocations } from "./api/Api.js";
+import { getAllCateories, getProductsByKeyword, getLocations, getSessionInfo } from "./api/Api.js";
+import { authState } from './config.js';
 
 function Header() {
 
@@ -13,20 +14,61 @@ function Header() {
   const [suggestions, setSuggestions] = useState([]); // results
   const [suggestedLocations, setSuggestedLocations] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [sessionInfo, setSesionInfo] = useState("");
+
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+  const suggestionRef = useRef(null);
+  const locationSuggestionRef = useRef(null);
+
+  const openDropDown = () => {
+    setIsOpen((prev) => !prev); // toggle between true/false
+  };
 
   useEffect(() => {
-          // ✅ this runs once when component loads (like document.onload)
-          const fetchCategories = async () => {
-              try {
-                  const data = await getAllCateories(); // call your API function
-                  setCategories(data); // update state with API response
-              } catch (error) {
-                  console.error("Error fetching categories:", error);
-              }
-          };
-  
-          fetchCategories();
-      }, []);
+    // ✅ this runs once when component loads (like document.onload)
+    const fetchCategories = async () => {
+      try {
+        const data = await getAllCateories(); // call your API function
+        setCategories(data); // update state with API response
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    const getSessionsInfo = async () => {
+      try {
+        const data = await getSessionInfo();
+        authState.isLoggedIn = data.loggedIn;
+        authState.loggedUser = data.username;
+        setSesionInfo(data);
+      } catch (error) {
+        console.error("Error fetching session:", error);
+      }
+    };
+
+    const handleClickOutside = (event) => {
+      // if dropdown is open AND click is outside dropdownRef
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+      if (suggestionRef.current && !suggestionRef.current.contains(event.target)) {
+        setSuggestions([]);
+      }
+      if (locationSuggestionRef.current && !locationSuggestionRef.current.contains(event.target)) {
+        setSuggestedLocations([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    getSessionsInfo();
+    fetchCategories();
+    // ✅ cleanup on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const globalSearch = async (event) => {
     const keyword = event.target.value;
@@ -62,16 +104,35 @@ function Header() {
 
   }
 
+
   const handleSelect = (id) => {
     console.log("Selected item:", id);
     // here you can redirect, or call another function
   };
 
-  const openLogin=function(){
-    document.getElementById("loginpage").style.display="block";
+  const openLogin = function () {
+    if (authState.isLoggedIn) {
+      openDropDown();
+    }
+    else {
+      document.getElementById("loginpage").style.display = "block";
+    }
   }
 
-  const selectedCategory= (event) => {
+  const openLogout =function (){
+    document.getElementById("logoutpage").style.display = "block";
+  }
+
+
+  const openFavourites = () => {
+    if (authState && authState.isLoggedIn) {
+      navigate("/favourites"); // ✅ React way instead of window.location.href
+    } else {
+      document.getElementById("loginpage").style.display = "block";
+    }
+  };
+
+  const selectedCategory = (event) => {
     console.log(event.target.value);
   }
 
@@ -79,7 +140,7 @@ function Header() {
     <div className="header" id="header">
       <header>
         <div className="logo">
-        <Link to={`/index`}>
+          <a href={`/index`}>
             <img
               title="index"
               src={logo}
@@ -87,7 +148,7 @@ function Header() {
               height="60"
               alt="logo"
             />
-          </Link>
+          </a>
         </div>
         <div className="srch-con">
           <div className="search-container">
@@ -104,7 +165,7 @@ function Header() {
               </div>
               <div className="suggestion-box">
                 <div id="item">
-                  <div className="dropdown-search" id="drop-item">
+                  <div ref={suggestionRef} className="dropdown-search" id="drop-item">
                     {suggestions.length > 0 &&
                       suggestions.map((item) => (
                         <div key={item[0]} onClick={() => handleSelect(item[0])}>
@@ -140,37 +201,37 @@ function Header() {
           <div className="contact">
             <div className="location-search">
               <div className="search">
-                  <div>
-                    <input
-                      id="search-location"
-                      title="start typing product name"
-                      placeholder="search location"
-                      type="text"
-                      value={locationQuery}
-                      onChange={locationSearch}
-                    />
-                    
-                  </div>
-                  <div className='location-suggestion-box'>
-                    <div id="loc">
-                      <div className="dropdown-search" id="drop-location">
-                        {suggestedLocations.length > 0 && suggestedLocations.map((item) => (<div className='dropdownlist' key={item.locId} onClick={() => handleSelect(item.locId)}>{item.locName} </div>))}
-                      </div>
+                <div>
+                  <input
+                    id="search-location"
+                    title="start typing product name"
+                    placeholder="search location"
+                    type="text"
+                    value={locationQuery}
+                    onChange={locationSearch}
+                  />
+
+                </div>
+                <div className='location-suggestion-box'>
+                  <div id="loc">
+                    <div ref={locationSuggestionRef} className="dropdown-search" id="drop-location">
+                      {suggestedLocations.length > 0 && suggestedLocations.map((item) => (<div className='dropdownlist' key={item.locId} onClick={() => handleSelect(item.locId)}>{item.locName} </div>))}
                     </div>
                   </div>
-                  <div id="serch-btn">
-                      <button>
-                        <img src={searchImg} title="search" alt="search" />
-                      </button>
-                    </div>
+                </div>
+                <div id="serch-btn">
+                  <button>
+                    <img src={searchImg} title="search" alt="search" />
+                  </button>
                 </div>
               </div>
+            </div>
           </div>
           <div className="clear-both"></div>
         </div>
         <div className="clear-both"></div>
       </header>
-      <hr/>
+      <hr />
       <nav>
         <div>
           <div className="category">
@@ -181,8 +242,8 @@ function Header() {
                 </option>
                 {categories.length && categories.map((category) => (
                   <option key={category.categoryId} value={category.categoryName} onChange={() => selectedCategory(this)}>
-                  {category.categoryName}s
-                </option>
+                    {category.categoryName}s
+                  </option>
                 ))}
               </select>
             </div>
@@ -199,48 +260,52 @@ function Header() {
             <div className="signed-user">
               <div id="label">
                 <label>
-                  <pre id="user"></pre>
+                  <pre id="user">{sessionInfo.loggedIn ? `Hello, ${sessionInfo.username}` : `Welcome, Guest !`} </pre>
                 </label>
               </div>
             </div>
-            <div id="profile-icon" onClick={() => openLogin()}>
-              <div>
-                <a id="profile" title="login/signup" href="#">
+            <div id="profile-icon">
+              <div ref={dropdownRef} onClick={() => openLogin()}>
+                <div>
                   <img
                     id="prof"
                     src="/images/default-user.png"
                     style={{ width: "30px", borderRadius: "50%" }}
                     alt="user"
                   />
-                </a>
-                <div className="dropdown" id="drop-profile">
-                  <div></div>
-                  <div>
-                    <div>Edit profile</div>
-                  </div>
-                  <div>
-                    <div>Order Details</div>
-                  </div>
-                  <div>
-                    <div>Post Details</div>
-                  </div>
-                  <div>
-                    <div>Chat History</div>
-                  </div>
-                  <div>
-                    <div>Log Out</div>
+                  <div ref={dropdownRef} className="dropdown" id="drop-profile" style={{ display: isOpen ? "block" : "none", border: "1px solid gray", padding: "10px" }}>
+                    <div></div>
+                    <div>
+                      <Link to={`/edit-profile`}>
+                        <div>Edit profile</div>
+                      </Link>
+                    </div>
+                    <div>
+                      <div>Order Details</div>
+                    </div>
+                    <div>
+                      <div>Post Details</div>
+                    </div>
+                    <div>
+                      <Link to={`/chats`}>
+                        <div>Chat History</div>
+                      </Link>
+                    </div>
+                    <div>
+                      <div onClick={() => openLogout()}>Log Out</div>
+                    </div>
                   </div>
                 </div>
               </div>
               <div>
-                <a title="favorites">
+                <div onClick={() => openFavourites()} title="favorites">
                   <img src="/images/liked.png" style={{ width: "30px" }} alt="favorite" />
-                </a>
+                </div>
               </div>
               <div>
-                <a title="sell">
+                <div title="sell">
                   <img src="/images/sell.png" alt="sell" />
-                </a>
+                </div>
               </div>
             </div>
           </div>

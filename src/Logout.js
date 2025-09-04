@@ -1,10 +1,20 @@
+import { logout } from "./api/Api";
+
 export default function Logout(){
 const closeLogout=function(){
     document.getElementById("logoutpage").style.display = "none";
 }
-const restrictBackNavigation = function (){
+const restrictBackNavigation = async () => {
+  // prevent back navigation
+  window.history.pushState(null, "", window.location.href);
+  window.onpopstate = function () {
+    window.history.pushState(null, "", window.location.href);
+  };
+
+  await logout();
 
 }
+
 
     return (
         <div className="form" id="logoutpage">
@@ -21,7 +31,7 @@ const restrictBackNavigation = function (){
 				<tr>
 					<th>
 						<label htmlFor="cancel"><input type="button" value="cancel" id="cancel"/></label>
-						<a href="index.html?action=logout"><label htmlFor="logout"><input type="button" value="logout" id="logoutBtn" onClick={() => restrictBackNavigation()}/></label></a>
+						<a href="/index"><label htmlFor="logout"><input type="button" value="logout" id="logoutBtn" onClick={() => restrictBackNavigation()}/></label></a>
 					</th>
 				</tr>
                 </tbody>

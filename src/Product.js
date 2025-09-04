@@ -25,7 +25,7 @@ export default function Product() {
         return <div className="main" style={{ minHeight: "500px" }}>
             <div className="product-details-container"
                 style={{ display: "flex", gap: "40px", padding: "30px", borderRadius: "12px", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", background: "#fff" }}>
-                <img src="/images/productNotFound.jpg" width="960" />
+                <img src="/images/productNotFound.jpg" alt="" width="960" />
             </div>
         </div>
     }
@@ -51,7 +51,7 @@ export default function Product() {
                     style={{ flex: "2", display: "flex", gap: "20px", alignItems: "flex-start" }}>
                     <div className="product-image-box" style={{ flex: 1 }}>
                         <img id="productImage" src={product.productImage ? `/images/${product.productImage}` : `/images/default.png`}
-                            alt="Product Image"
+                            alt="Product"
                             style={{ maxWidth: "100%", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)" }} />
                     </div>
                     <div className="product-info-box" style={{ flex: 2 }}>
@@ -84,7 +84,7 @@ export default function Product() {
                     <h3 style={{ fontFamily: "'Comic Sans MS', cursive" }}>Owner Info</h3>
                     <div className="owner-image-box" style={{ margin: "15px 0" }}>
                         <img id="ownerPhoto" src={product.owner.profileImage ? `${STATIC_CONTENT_PATH}/media/images/${product.owner.profileImage}` : `/images/default-user.png`}
-                            alt="Owner Photo"
+                            alt="Owner"
                             style={{ width: "120px", height: "120px", borderRadius: "50%", objectFit: "cover", border: "2px solid #ccc" }} />
                     </div>
                     <p>

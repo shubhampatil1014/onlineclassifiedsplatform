@@ -1,6 +1,50 @@
 const BASE_URL = "http://localhost:8080";
 
-export async function getAllProducts(){
+export async function getSessionInfo() {
+    const response = await fetch(`${BASE_URL}/session-info`, {
+    method: "GET",
+    credentials: "include", // ✅ send JSESSIONID cookie
+  });
+    if (!response.ok) {
+        throw new Error("Failed to fetch products");
+    }
+    const sessionInfo = await response.json();
+    return sessionInfo;
+}
+
+export async function logout() {
+    const response = await fetch(`${BASE_URL}/logout`, {
+    method: "POST",
+    credentials: "include", // ✅ send JSESSIONID cookie
+  });
+    if (!response.ok) {
+        throw new Error("Failed while logging out...");
+    }
+    return response;
+}
+
+export async function authenticateUser(userName, password, loginType) {
+    const formData = new URLSearchParams();
+    formData.append("username", userName);
+    formData.append("password", password);
+    formData.append("loginType", loginType);
+
+    const response = await fetch(`${BASE_URL}/authenticate`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData,
+        credentials: "include", // ✅ important
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch authenticate");
+    }
+    const data = await response.json();
+    return data;
+}
+
+export async function getAllProducts() {
     const response = await fetch(`${BASE_URL}/getAllProducts`);
     if (!response.ok) {
         throw new Error("Failed to fetch products");
@@ -9,7 +53,7 @@ export async function getAllProducts(){
     return products;
 }
 
-export async function getAllCateories(){
+export async function getAllCateories() {
     const response = await fetch(`${BASE_URL}/categories`);
     if (!response.ok) {
         throw new Error("Failed to fetch categories");
@@ -18,7 +62,7 @@ export async function getAllCateories(){
     return categories;
 }
 
-export async function getProductsByKeyword(keyword){
+export async function getProductsByKeyword(keyword) {
     const response = await fetch(`${BASE_URL}/products/getProductsByKeyword/${keyword}`);
     if (!response.ok) {
         throw new Error("Failed to fetch products By Keyword");
@@ -28,7 +72,7 @@ export async function getProductsByKeyword(keyword){
     return productsByKeyword;
 }
 
-export async function getLocations(location){
+export async function getLocations(location) {
     const response = await fetch(`${BASE_URL}/getLocations/${location}`);
     if (!response.ok) {
         throw new Error("Failed to fetch locations");
@@ -37,11 +81,23 @@ export async function getLocations(location){
     return locations;
 }
 
-export async function getProductDetails(productId){
+export async function getProductDetails(productId) {
     const response = await fetch(`${BASE_URL}/products/${productId}`);
     if (!response.ok) {
         throw new Error("Failed to fetch locations");
     }
     const product = await response.json();
     return product;
+}
+
+export async function getFavProducts() {
+    const response = await fetch(`${BASE_URL}/getFavProducts`, {
+    method: "GET",
+    credentials: "include", // ✅ send JSESSIONID cookie
+  });
+    if (!response.ok) {
+        throw new Error("Failed to fetch favourite products");
+    }
+    const favProducts = await response.json();
+    return favProducts;
 }

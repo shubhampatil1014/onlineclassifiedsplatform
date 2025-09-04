@@ -197,6 +197,9 @@ a{
 	padding:10px 0;
 	
 }
+.dropdown div div a {
+	display: contents;
+}
 
 #drop-profile {
 	background-color: #fff;
@@ -226,4 +229,26 @@ a{
 
 .dropdown-item a:hover {
 	color: #007bff;
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .header {
+    padding: 10px 15px;
+  }
+
+  .logo img {
+    width: 80px;
+    height: auto;
+  }
+
+  .profiles {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .srch-con {
+    gap: 5px;
+  }
 }
