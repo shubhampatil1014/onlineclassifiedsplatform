@@ -2,9 +2,9 @@ const BASE_URL = "http://localhost:8080";
 
 export async function getSessionInfo() {
     const response = await fetch(`${BASE_URL}/session-info`, {
-    method: "GET",
-    credentials: "include", // ✅ send JSESSIONID cookie
-  });
+        method: "GET",
+        credentials: "include", // ✅ send JSESSIONID cookie
+    });
     if (!response.ok) {
         throw new Error("Failed to fetch products");
     }
@@ -14,9 +14,9 @@ export async function getSessionInfo() {
 
 export async function logout() {
     const response = await fetch(`${BASE_URL}/logout`, {
-    method: "POST",
-    credentials: "include", // ✅ send JSESSIONID cookie
-  });
+        method: "POST",
+        credentials: "include", // ✅ send JSESSIONID cookie
+    });
     if (!response.ok) {
         throw new Error("Failed while logging out...");
     }
@@ -53,6 +53,25 @@ export async function getAllProducts() {
     return products;
 }
 
+export async function addToFavourites(id) {
+    const params = new URLSearchParams();
+    params.append("productId", id);
+
+    const response = await fetch(`${BASE_URL}/addToFavourites`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),  // ✅ same as jQuery data
+        credentials: "include",   // ✅ send JSESSIONID cookie
+    });
+    if (!response.ok) {
+        throw new Error("Failed to add to favourites");
+    }
+    const data = await response.text();
+    return data;
+}
+
 export async function getAllCateories() {
     const response = await fetch(`${BASE_URL}/categories`);
     if (!response.ok) {
@@ -60,6 +79,18 @@ export async function getAllCateories() {
     }
     const categories = await response.json();
     return categories;
+}
+
+export async function getChats() {
+    const response = await fetch(`${BASE_URL}/chats`, {
+    method: "GET",
+    credentials: "include"
+  });
+    if (!response.ok) {
+        throw new Error("Failed to fetch chats");
+    }
+    const chats = await response.json();
+    return chats;
 }
 
 export async function getProductsByKeyword(keyword) {
@@ -92,9 +123,9 @@ export async function getProductDetails(productId) {
 
 export async function getFavProducts() {
     const response = await fetch(`${BASE_URL}/getFavProducts`, {
-    method: "GET",
-    credentials: "include", // ✅ send JSESSIONID cookie
-  });
+        method: "GET",
+        credentials: "include", // ✅ send JSESSIONID cookie
+    });
     if (!response.ok) {
         throw new Error("Failed to fetch favourite products");
     }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getProductDetails } from "./api/Api";
 import { useParams } from "react-router-dom";
 import { STATIC_CONTENT_PATH } from "./config";
+import { authState } from "./config";
 
 export default function Product() {
     const { productId } = useParams();
@@ -40,6 +41,24 @@ export default function Product() {
             if (key && value) categoryDetails[key] = value;
         });
     }
+
+    const openChat = function (ownerId,name){
+	// dataLayer.push({
+	//   'event': 'openChat',
+	//   'pageCategory': 'Product',
+	//   'user': {
+	// 	'name' : name,
+	// 	'id' : ownerId
+	// }
+	// });
+
+	if(authState.isLoggedIn){
+		window.location.href=`/chats?ownerId=${ownerId}&name=${name}`;
+	}else{
+		document.getElementById("loginpage").style.display="block";
+	}
+	
+}
 
     return (
 
@@ -97,7 +116,7 @@ export default function Product() {
                         <button id="showPhoneBtn" className="action-btn"
                             style={{ marginBottom: "10px" }}>Get Contact Number</button>
                         <p id="ownerPhone" style={{ display: "none", fontWeight: "bold" }}></p>
-                        <button id="openChat" className="action-btn">Chat with Owner</button>
+                        <button id="openChat" className="action-btn" onClick={() => openChat(product.owner.id,`${product.owner.firstname} ${product.owner.lastname}`)}>Chat with Owner</button>
                     </div>
                 </div>
 
