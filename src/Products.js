@@ -1,17 +1,28 @@
 import { useState, useEffect } from "react";
-import { addToFavourites, getAllProducts } from "./api/Api.js";
+import { addToFavourites, getAllProducts, getProductsByLocation } from "./api/Api.js";
 import { Link } from "react-router-dom";
+import { authState } from "./config.js";
 
 function Products() {
 
     const [products, setProducts] = useState([]);
-    // const [productsByLocation, setProductsByLocation] = useState([]);
+    const [productsByLocation, setProductsByLocation] = useState([]);
     // const [productsByCategory, setProductsByCategory] = useState([]);
     // const [productsByKeyword, setProductsByKeyword] = useState([]);
+    const [allFilteredProducts, setAllFilteredProducts] = useState([]);
+    let locationFilter, categoryFilter;
+    const params = new URLSearchParams();
+    locationFilter = params.get('location');
+    categoryFilter = params.get('category');
+
+
+
+
 
     useEffect(() => {
         // ✅ this runs once when component loads (like document.onload)
-        const fetchProducts = async () => {
+
+        const fetchAllProducts = async () => {
             try {
                 const data = await getAllProducts(); // call your API function
                 setProducts(data); // update state with API response
@@ -23,22 +34,51 @@ function Products() {
                 if (header) {
                     header.style.display = "block"; // set display
                 }
+                await showProductsByFilter();
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
         };
 
-        fetchProducts();
-    }, []);
+        const getFilteredProducts = async () => {
+
+
+            if (locationFilter && locationFilter.length > 0) {
+                const filteredProducts = await getProductsByLocation();
+                setProductsByLocation(filteredProducts);
+            }
+        };
+
+        const showProductsByFilter = async () => {
+            if (categoryFilter) {
+                document.querySelector(`select[name="category"]`).value = categoryFilter;
+                setAllFilteredProducts(products);
+                if (locationFilter) {
+                    setAllFilteredProducts(productsByLocation);
+                }
+            }
+            else if (locationFilter) {
+
+            }
+        };
+        getFilteredProducts();
+        fetchAllProducts();
+    });
 
     const addToFavourite = async (id) => {
         try {
-            const isAdded = await addToFavourites(id);
-            if (isAdded === "Y") {
-                document.querySelector(`.favourite${id}`).src = "images/liked.png";
-            } else if (isAdded === "N") {
-                document.querySelector(`.favourite${id}`).src = "images/unliked.png";
+            if (authState.isLoggedIn) {
+                const isAdded = await addToFavourites(id);
+                if (isAdded === "Y") {
+                    document.querySelector(`.favourite${id}`).src = "images/liked.png";
+                } else if (isAdded === "N") {
+                    document.querySelector(`.favourite${id}`).src = "images/unliked.png";
+                }
             }
+            else {
+                document.getElementById("loginpage").style.display = "block";
+            }
+
         } catch (error) {
 
         }
@@ -52,7 +92,7 @@ function Products() {
         <div id="products" className="products">
             <div className="header" id="byLocation">
                 <div className="title">
-                    <span>Products By Locations</span>
+                    <span>{locationFilter ? locationFilter : `Products By Locations`}</span>
                 </div>
                 <div className="shopBtn">
                 </div>
@@ -60,12 +100,41 @@ function Products() {
             </div>
 
             <div className="Product" id="locationWiseProductList">
+                {!categoryFilter && productsByLocation.length > 0 ?
+                    (productsByLocation.map((product) => (
+                        <div className='one' key={product.productId}>
+                            <Link to={`/product/${product.productId}`}>
+                                <div className='pro-img' style={{
+                                    background: `url(images/${product.categoryName}.png) #eeebe6`,
+                                    backgroundSize: "260px 250px",
+                                    backgroundRepeat: "no-repeat",
+                                }}></div>
+                            </Link>
+                            <div className='pro-info'>
+                                <label>{product.title}</label><br />
+                                {product.description}<br />
+                                <span className='price'>Rs. {product.price}</span>
+                            </div>
+                            <div className='buttons'>
+                                <Link to={`/product/${product.productId}`}>
+                                    <button value='owner' title='Owner Information'>MORE INFO.</button>
+                                </Link>
+                                <button id='fav' value='favorite' title='add to favorites' onClick={() => addToFavourite(product.productId)}>
+                                    <img id={`favourite${product.productId}`} className={`favourite${product.productId}`} src={`images/unliked.png`} alt='favorite' width='16' height='16' />
+                                </button>
+                            </div>
+                        </div>
+                    ))) : <><div className="no-results-box">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="No Results" />
+                        <h3>No Results Found</h3>
+                        <p>Try a different keyword or check your spelling.</p>
+                    </div><div className='clear-both'></div></>}
             </div>
 
 
             <div className="header" id="byCategory">
                 <div className="title">
-                    <span>Products By Category</span>
+                    <span>{categoryFilter ? categoryFilter : `Products By Category`}</span>
                 </div>
                 <div className="shopBtn">
                 </div>
@@ -73,6 +142,35 @@ function Products() {
             </div>
 
             <div className="Product" id="categoryWiseProductList">
+                {allFilteredProducts.length > 0 ?
+                    (allFilteredProducts.map((product) => (
+                        <div className='one' key={product.productId}>
+                            <Link to={`/product/${product.productId}`}>
+                                <div className='pro-img' style={{
+                                    background: `url(images/${product.categoryName}.png) #eeebe6`,
+                                    backgroundSize: "260px 250px",
+                                    backgroundRepeat: "no-repeat",
+                                }}></div>
+                            </Link>
+                            <div className='pro-info'>
+                                <label>{product.title}</label><br />
+                                {product.description}<br />
+                                <span className='price'>Rs. {product.price}</span>
+                            </div>
+                            <div className='buttons'>
+                                <Link to={`/product/${product.productId}`}>
+                                    <button value='owner' title='Owner Information'>MORE INFO.</button>
+                                </Link>
+                                <button id='fav' value='favorite' title='add to favorites' onClick={() => addToFavourite(product.productId)}>
+                                    <img id={`favourite${product.productId}`} className={`favourite${product.productId}`} src={`images/unliked.png`} alt='favorite' width='16' height='16' />
+                                </button>
+                            </div>
+                        </div>
+                    ))) : <><div className="no-results-box">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="No Results" />
+                        <h3>No Results Found</h3>
+                        <p>Try a different keyword or check your spelling.</p>
+                    </div><div className='clear-both'></div></>}
             </div>
 
 
@@ -115,9 +213,9 @@ function Products() {
                             <span className='price'>Rs. {product.price}</span>
                         </div>
                         <div className='buttons'>
-                            <a href={`product.html?productId=${product.productId}`}>
+                            <Link to={`/product/${product.productId}`}>
                                 <button value='owner' title='Owner Information'>MORE INFO.</button>
-                            </a>
+                            </Link>
                             <button id='fav' value='favorite' title='add to favorites' onClick={() => addToFavourite(product.productId)}>
                                 <img id={`favourite${product.productId}`} className={`favourite${product.productId}`} src={`images/unliked.png`} alt='favorite' width='16' height='16' />
                             </button>

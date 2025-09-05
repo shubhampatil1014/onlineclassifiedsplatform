@@ -1,4 +1,19 @@
+import { useEffect, useState } from "react";
+import { getCustomerDetails } from "./api/Api";
+import { STATIC_CONTENT_PATH } from "./config";
+
 export default function EditProfile() {
+
+    const [profile,setProfile] = useState("");
+
+    useEffect(() => {
+        const getCustomerProfile= async () => {
+            const profileDetails= await getCustomerDetails();
+            setProfile(profileDetails);
+        }
+        getCustomerProfile();
+    },[]);
+
     return (
         <>
             <style type="text/css">{`
@@ -115,19 +130,19 @@ export default function EditProfile() {
                             <form id="edit-profile-form" className="edit-profile-form">
                                 <div className="form-group">
                                     <label htmlFor="edit-firstname">First Name</label> <input id="edit-firstname" name="firstname" type="text"
-                                        placeholder="Enter First Name" />
+                                        placeholder="Enter First Name" defaultValue={profile.firstname ? profile.firstname : ""} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="edit-lastname">Last Name</label> <input id="edit-lastname" name="lastname" type="text"
-                                        placeholder="Enter Last Name" />
+                                        placeholder="Enter Last Name" defaultValue={profile.lastname ? profile.lastname : ""} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="edit-mobile">Mobile Number</label> <input id="edit-mobile" name="mobile" type="text"
-                                        placeholder="Enter Mobile Number" />
+                                        placeholder="Enter Mobile Number" defaultValue={profile.mobile ? profile.mobile : ""} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="edit-email">Email</label> <input id="edit-email" type="email"
-                                        value="user@example.com" disabled />
+                                        value={profile.email ? profile.email : `user@example.com`} disabled />
                                 </div>
                                 <div>
                                     <input type="hidden" id="profileImage" name="profileImage" />
@@ -141,7 +156,7 @@ export default function EditProfile() {
 
                                 <input type="file" id="profileUpload" hidden /> <label
                                     htmlFor="profileUpload" className="upload-btn"><img
-                                        src="images/profile.png" alt="Profile"
+                                        src={profile.profileImage ? `${STATIC_CONTENT_PATH}/media/images/${profile.profileImage}`: `images/profile.png`} alt="Profile"
                                         id="profilePreview" /></label>
                             </div>
                         </div>

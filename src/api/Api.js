@@ -83,14 +83,38 @@ export async function getAllCateories() {
 
 export async function getChats() {
     const response = await fetch(`${BASE_URL}/chats`, {
-    method: "GET",
-    credentials: "include"
-  });
+        method: "GET",
+        credentials: "include"
+    });
     if (!response.ok) {
         throw new Error("Failed to fetch chats");
     }
     const chats = await response.json();
     return chats;
+}
+
+export async function getChatsByOwner(ownerId) {
+    const response = await fetch(`${BASE_URL}/chats/messages/${ownerId}`, {
+        method: "GET",
+        credentials: "include"
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch chats");
+    }
+    const chats = await response.json();
+    return chats;
+}
+
+export async function getCustomerDetails(){
+    const response = await fetch(`${BASE_URL}/getCustomerDetails`,{
+        method : "GET",
+        credentials : "include"
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch profile");
+    }
+    const profile = await response.json();
+    return profile;
 }
 
 export async function getProductsByKeyword(keyword) {
@@ -131,4 +155,16 @@ export async function getFavProducts() {
     }
     const favProducts = await response.json();
     return favProducts;
+}
+
+export async function getProductsByLocation(locationFilter) {
+    const response = await fetch(`${BASE_URL}/products/getProductsByLocation/${locationFilter}`, {
+        method: "GET",
+        credentials: "include", // ✅ send JSESSIONID cookie
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch products");
+    }
+    const products = await response.json();
+    return products;
 }

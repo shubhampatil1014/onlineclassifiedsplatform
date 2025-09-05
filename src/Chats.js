@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import { getChats } from "./api/Api";
+import { getChats, getChatsByOwner } from "./api/Api";
 import { useLocation } from "react-router-dom";
+import { STATIC_CONTENT_PATH } from "./config";
 
 export default function Chats() {
 
     const [chats, setChats] = useState([]);
-    const [ownerName,setOwnerName] = useState("");
+    const [chatMessages, setChatMessages] = useState([]);
+    const [ownerName, setOwnerName] = useState("");
 
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    
 
     useEffect(() => {
         const getChatsForUser = async () => {
@@ -16,20 +18,22 @@ export default function Chats() {
             setChats(userChats);
         }
         getChatsForUser();
-
+        const queryParams = new URLSearchParams(location.search);
         const OwnerId = queryParams.get("ownerId");
         const OwnerName = queryParams.get("name");
         if (OwnerId && OwnerName) {
-            setOwnerName(OwnerName);
-            openChat(OwnerId,OwnerName);
+            openChat(OwnerId, OwnerName);
         }
-    }, []);
+    }, [location.search]);
 
     const sendMessage = function () {
 
     }
 
-    const openChat = async (OwnerId,OwnerName) => {
+    const openChat = async (OwnerId, OwnerName) => {
+        setOwnerName(OwnerName);
+        const response = await getChatsByOwner(OwnerId);
+        setChatMessages(response);
     }
 
     return (
@@ -223,6 +227,24 @@ export default function Chats() {
                         <div className="chat-header" id="chatHeader">{ownerName ? ownerName : `Select a
                             conversation`}</div>
                         <div className="chat-body" id="chatMessages">
+                            {chatMessages.length > 0 && chatMessages.map((message, index) => {
+                                const mediaElement = (message.mediaUrl && message.mediaUrl.length > 0) ? (
+                                    <div><img alt="media" src={`${STATIC_CONTENT_PATH}/${message.mediaUrl}`} width="200" height="200"/></div>
+                                ) : "";
+
+                                return message.isSent === "Y" ? (
+                                    <div key={index} className="chat-message sent">
+                                        {mediaElement}
+                                        {message.messagetext}
+                                    </div>
+                                ) : (
+                                    <div key={index} className="chat-message received">
+                                        {mediaElement}
+                                        {message.messagetext}
+                                    </div>
+                                );
+                            })}
+
                         </div>
                         <div className="chat-footer">
                             <input type="text" id="messageInput"

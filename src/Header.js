@@ -132,9 +132,24 @@ function Header() {
     }
   };
 
-  const selectedCategory = (event) => {
-    console.log(event.target.value);
+  const selectedCategory = (elt) => {
+    const url = new URL(window.location.href);
+	if (elt.selectedIndex > 0) {
+		let category = elt.value;
+		url.searchParams.set("category", category);
+		window.location.href = url;
+	}
+	else {
+		url.searchParams.delete("category");
+		window.location.href = url;
+	}
   }
+  
+  const search = function(){
+    if (searchQuery && searchQuery !== "") {
+			window.location.href = `search-results?keyword=${searchQuery}`;
+		}
+  };
 
   return (
     <div className="header" id="header">
@@ -187,7 +202,7 @@ function Header() {
               </div>
 
               <div id="serch-btn">
-                <button>
+                <button onClick={() => search()}>
                   <img
                     src={searchImg}
                     style={{ background: "darkgray", top: 0, width: "45px", height: "45px" }}
