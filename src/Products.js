@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
 import { addToFavourites, getAllProducts, getProductsByLocation } from "./api/Api.js";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { authState } from "./config.js";
 
 function Products() {
 
     const [products, setProducts] = useState([]);
     const [productsByLocation, setProductsByLocation] = useState([]);
+    const location = useLocation();
     // const [productsByCategory, setProductsByCategory] = useState([]);
     // const [productsByKeyword, setProductsByKeyword] = useState([]);
     const [allFilteredProducts, setAllFilteredProducts] = useState([]);
-    let locationFilter, categoryFilter;
-    const params = new URLSearchParams();
+    let locationFilter, categoryFilter, filteredProducts=[];
+    const params = new URLSearchParams(location.search);
     locationFilter = params.get('location');
     categoryFilter = params.get('category');
-
-
-
-
 
     useEffect(() => {
         // ✅ this runs once when component loads (like document.onload)
@@ -25,45 +22,29 @@ function Products() {
         const fetchAllProducts = async () => {
             try {
                 const data = await getAllProducts(); // call your API function
+                filteredProducts = data;
                 setProducts(data); // update state with API response
-                const el = document.getElementById("productList");
-                if (el) {
-                    el.style.display = "block"; // set display
+                if (locationFilter && locationFilter.length > 0) {
+                    filteredProducts = await getProductsByLocation(locationFilter);
+                    setProductsByLocation(filteredProducts);
+                    document.getElementById("locationName").innerHTML=locationFilter;
+					document.getElementById("locFilter").style.display="block";
+                    console.log(productsByLocation);
                 }
-                const header = document.getElementById("allProducts");
-                if (header) {
-                    header.style.display = "block"; // set display
+
+                if (categoryFilter) {
+                    document.querySelector(`select[name="category"]`).value = categoryFilter;
+                    setAllFilteredProducts(filteredProducts);
+                    if (locationFilter) {
+                        setProductsByLocation([]);
+                    }
                 }
-                await showProductsByFilter();
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
         };
-
-        const getFilteredProducts = async () => {
-
-
-            if (locationFilter && locationFilter.length > 0) {
-                const filteredProducts = await getProductsByLocation();
-                setProductsByLocation(filteredProducts);
-            }
-        };
-
-        const showProductsByFilter = async () => {
-            if (categoryFilter) {
-                document.querySelector(`select[name="category"]`).value = categoryFilter;
-                setAllFilteredProducts(products);
-                if (locationFilter) {
-                    setAllFilteredProducts(productsByLocation);
-                }
-            }
-            else if (locationFilter) {
-
-            }
-        };
-        getFilteredProducts();
         fetchAllProducts();
-    });
+    }, [categoryFilter,locationFilter]);
 
     const addToFavourite = async (id) => {
         try {
@@ -90,16 +71,16 @@ function Products() {
             <img alt="banner" src="images/banner_2.png" width="1200" height="700" style={{ borderRadius: "10px" }} />
         </div>
         <div id="products" className="products">
-            <div className="header" id="byLocation">
+            <div className="header" id="byLocation" style={{display : locationFilter && !categoryFilter ? "block" : "none" }}>
                 <div className="title">
-                    <span>{locationFilter ? locationFilter : `Products By Locations`}</span>
+                    <span>{locationFilter ? `Results For : ${locationFilter}` : `Products By Locations`}</span>
                 </div>
                 <div className="shopBtn">
                 </div>
                 <div className="clear-both"></div>
             </div>
 
-            <div className="Product" id="locationWiseProductList">
+            <div className="Product" id="locationWiseProductList" style={{display : locationFilter && !categoryFilter ? "block" : "none" }}>
                 {!categoryFilter && productsByLocation.length > 0 ?
                     (productsByLocation.map((product) => (
                         <div className='one' key={product.productId}>
@@ -124,27 +105,28 @@ function Products() {
                                 </button>
                             </div>
                         </div>
-                    ))) : <><div className="no-results-box">
+                    ))) : locationFilter && !categoryFilter ? <><div className="no-results-box">
                         <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="No Results" />
                         <h3>No Results Found</h3>
                         <p>Try a different keyword or check your spelling.</p>
-                    </div><div className='clear-both'></div></>}
+                    </div></> : ``}
+                    <div className='clear-both'></div>
             </div>
 
 
-            <div className="header" id="byCategory">
+            <div className="header" id="byCategory" style={{display : categoryFilter ? "block" : "none" }}>
                 <div className="title">
-                    <span>{categoryFilter ? categoryFilter : `Products By Category`}</span>
+                    <span>{categoryFilter && locationFilter ? `${categoryFilter}s From ${locationFilter}` : (categoryFilter ? `${categoryFilter}s`:``)}</span>
                 </div>
                 <div className="shopBtn">
                 </div>
                 <div className="clear-both"></div>
             </div>
 
-            <div className="Product" id="categoryWiseProductList">
+            <div className="Product" id="categoryWiseProductList" style={{display : categoryFilter ? "block" : "none" }}>
                 {allFilteredProducts.length > 0 ?
-                    (allFilteredProducts.map((product) => (
-                        <div className='one' key={product.productId}>
+                    (allFilteredProducts.map((product) => (product.categoryName === categoryFilter ?
+                        (<div className='one' key={product.productId}>
                             <Link to={`/product/${product.productId}`}>
                                 <div className='pro-img' style={{
                                     background: `url(images/${product.categoryName}.png) #eeebe6`,
@@ -166,11 +148,12 @@ function Products() {
                                 </button>
                             </div>
                         </div>
-                    ))) : <><div className="no-results-box">
-                        <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="No Results" />
-                        <h3>No Results Found</h3>
-                        <p>Try a different keyword or check your spelling.</p>
-                    </div><div className='clear-both'></div></>}
+                        ) : ``))) : categoryFilter ? <><div className="no-results-box">
+                            <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="No Results" />
+                            <h3>No Results Found</h3>
+                            <p>Try a different keyword or check your spelling.</p>
+                        </div></> : ``}
+                        <div className='clear-both'></div>
             </div>
 
 
@@ -189,7 +172,7 @@ function Products() {
 
 
 
-            <div className="header" id="allProducts">
+            <div className="header" id="allProducts" style={{display : products.length > 0 ? "block" : "none" }}>
                 <div className="title">
                     Products
                 </div>
@@ -197,7 +180,7 @@ function Products() {
                 </div>
             </div>
 
-            <div className="Product" id="productList">
+            <div className="Product" id="productList" style={{display : products.length > 0 ? "block" : "none" }}>
                 {products.length > 0 && products.map((product) => (
                     <div className='one' key={product.productId}>
                         <Link to={`/product/${product.productId}`}>

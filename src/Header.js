@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 import logo from "./images/logo_7.png";
 import searchImg from "./images/search.png";
@@ -8,7 +8,7 @@ import { getAllCateories, getProductsByKeyword, getLocations, getSessionInfo } f
 import { authState } from './config.js';
 
 function Header() {
-
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]); // results
@@ -107,7 +107,18 @@ function Header() {
 
   const handleSelect = (id) => {
     console.log("Selected item:", id);
-    // here you can redirect, or call another function
+  };
+
+  const selectedLocation = (locationFilter) => {
+    console.log("Selected item:", locationFilter);
+    const params = new URLSearchParams(location.search);
+    if (locationFilter && locationFilter !== "") {
+      params.set("location", locationFilter);
+    }
+    else {
+      params.delete("location");
+    }
+    navigate({ pathname: location.pathname, search: params.toString() });
   };
 
   const openLogin = function () {
@@ -119,7 +130,7 @@ function Header() {
     }
   }
 
-  const openLogout =function (){
+  const openLogout = function () {
     document.getElementById("logoutpage").style.display = "block";
   }
 
@@ -132,24 +143,33 @@ function Header() {
     }
   };
 
-  const selectedCategory = (elt) => {
-    const url = new URL(window.location.href);
-	if (elt.selectedIndex > 0) {
-		let category = elt.value;
-		url.searchParams.set("category", category);
-		window.location.href = url;
-	}
-	else {
-		url.searchParams.delete("category");
-		window.location.href = url;
-	}
+  const selectedCategory = (event) => {
+    const params = new URLSearchParams(location.search);
+    const elt = event.target;
+    if (elt.selectedIndex > 0) {
+      let category = elt.value;
+      params.set("category", category);
+    }
+    else {
+      params.delete("category");
+    }
+    navigate({ pathname: location.pathname, search: params.toString() });
   }
-  
-  const search = function(){
+
+  const search = function () {
     if (searchQuery && searchQuery !== "") {
-			window.location.href = `search-results?keyword=${searchQuery}`;
-		}
+      window.location.href = `search-results?keyword=${searchQuery}`;
+    }
   };
+
+  const removeFilter = (event) => {
+    const element = event.target;
+    const params = new URLSearchParams(location.search);
+		params.delete(element.parentElement.className);
+    document.getElementById("locationName").innerHTML="";
+    element.parentElement.style.display="none";
+		navigate({ pathname: location.pathname, search: params.toString() });
+  }
 
   return (
     <div className="header" id="header">
@@ -230,7 +250,7 @@ function Header() {
                 <div className='location-suggestion-box'>
                   <div id="loc">
                     <div ref={locationSuggestionRef} className="dropdown-search" id="drop-location">
-                      {suggestedLocations.length > 0 && suggestedLocations.map((item) => (<div className='dropdownlist' key={item.locId} onClick={() => handleSelect(item.locId)}>{item.locName} </div>))}
+                      {suggestedLocations.length > 0 && suggestedLocations.map((item) => (<div className='dropdownlist' key={item.locId} onClick={() => selectedLocation(item.locName)}>{item.locName} </div>))}
                     </div>
                   </div>
                 </div>
@@ -251,12 +271,12 @@ function Header() {
         <div>
           <div className="category">
             <div className="pets">
-              <select id="categories" title="pet categories" name="category">
+              <select id="categories" title="pet categories" name="category" onChange={(event) => selectedCategory(event)}>
                 <option value="Shop By Category" defaultValue>
                   Shop By Category
                 </option>
                 {categories.length && categories.map((category) => (
-                  <option key={category.categoryId} value={category.categoryName} onChange={() => selectedCategory(this)}>
+                  <option key={category.categoryId} value={category.categoryName} >
                     {category.categoryName}s
                   </option>
                 ))}
@@ -266,9 +286,7 @@ function Header() {
           </div>
           <div className="nav-bar">
             <div className="nav-bar-content">
-              <div className="location" id="locFilter">
-                <button>x</button>
-              </div>
+              <div className="location" id="locFilter"> <button onClick={(event) => removeFilter(event)}>x</button><span id="locationName"></span></div>
             </div>
           </div>
           <div className="profiles">

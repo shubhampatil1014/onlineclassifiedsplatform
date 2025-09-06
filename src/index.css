@@ -11,3 +11,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.no-results-box {
+	float: none;
+	text-align: center;
+	padding: 30px;
+	border-radius: 12px;
+	background-color: #fdfdfd;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	color: #444;
+	margin: 20px auto;
+}
+
+.no-results-box img {
+	width: 80px;
+	margin-bottom: 15px;
+	opacity: 0.8;
+}
+
+.no-results-box h3 {
+	font-size: 20px;
+	margin-bottom: 8px;
+}
+
+.no-results-box p {
+	font-size: 14px;
+	color: #777;
+}
