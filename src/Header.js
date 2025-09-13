@@ -4,7 +4,7 @@ import './Header.css';
 import logo from "./images/logo_7.png";
 import searchImg from "./images/search.png";
 import './theme.css';
-import { getAllCateories, getProductsByKeyword, getLocations, getSessionInfo } from "./api/Api.js";
+import { getAllCateories, getProductsByKeyword, getLocations, getSessionInfo, getAllCategories } from "./api/Api.js";
 import { authState } from './config.js';
 
 function Header() {
@@ -30,7 +30,7 @@ function Header() {
     // ✅ this runs once when component loads (like document.onload)
     const fetchCategories = async () => {
       try {
-        const data = await getAllCateories(); // call your API function
+        const data = await getAllCategories(); // call your API function
         setCategories(data); // update state with API response
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -142,6 +142,14 @@ function Header() {
       document.getElementById("loginpage").style.display = "block";
     }
   };
+
+  const openSellPage= () => {
+    if (authState && authState.isLoggedIn) {
+      navigate("/sell"); // ✅ React way instead of window.location.href
+    } else {
+      document.getElementById("loginpage").style.display = "block";
+    }
+  }
 
   const selectedCategory = (event) => {
     const params = new URLSearchParams(location.search);
@@ -336,7 +344,7 @@ function Header() {
                 </div>
               </div>
               <div>
-                <div title="sell">
+                <div title="sell" onClick={() => openSellPage()}>
                   <img src="/images/sell.png" alt="sell" />
                 </div>
               </div>

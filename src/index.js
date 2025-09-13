@@ -15,46 +15,50 @@ import Logout from './Logout';
 import Favourites from './Favourites';
 import Chats from './Chats';
 import EditProfile from './EditProfile';
+import AddProduct from './AddProduct';
+import Sell from './Sell';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
-		<Router>
-			<div className="main-container">
-				<Header />
-				{/* Define routes here */}
-				<Routes>
-					<Route path="/" element={<Products />} />
-					<Route path="/index" element={<Products />} />
-					<Route path="/index/*" element={<Products />} />
-					<Route path="/product/:productId" element={<Product />} />
-					<Route path='/favourites' element={<Favourites/>}/>
-					<Route path='/chats' element={<Chats/>}/>
-					<Route path='/edit-profile' element={<EditProfile/>}/>
-				</Routes>
-				<Footer />
-			</div>
-			{/* 					Login Page 					*/}
+			<Router>
+				<div className="main-container">
+					<Header />
+					{/* Define routes here */}
+					<Routes>
+						<Route path="/" element={<Products />} />
+						<Route path="/index" element={<Products />} />
+						<Route path="/index/*" element={<Products />} />
+						<Route path="/product/:productId" element={<Product />} />
+						<Route path='/favourites' element={<Favourites />} />
+						<Route path='/chats' element={<Chats />} />
+						<Route path='/edit-profile' element={<EditProfile />} />
+						<Route path='/addproduct/:categoryId' element={<AddProduct />} />
+						<Route path='/sell' element={<Sell />} />
+					</Routes>
+					<Footer />
+				</div>
+				{/* 					Login Page 					*/}
 
-			<div id="loginpage" className="login-page">
-				<Login />
-			</div>
+				<div id="loginpage" className="login-page">
+					<Login />
+				</div>
 
-			{/* 					Register Page 					*/}
-
-
-			<div id="registerpage" className="register-page">
-				<Register/>
-			</div>
+				{/* 					Register Page 					*/}
 
 
-			{/* 					Logout Page 					*/}
+				<div id="registerpage" className="register-page">
+					<Register />
+				</div>
 
-			<div id="logoutpage" className="form-page">
-				<Logout/>
-			</div>
-		</Router>
+
+				{/* 					Logout Page 					*/}
+
+				<div id="logoutpage" className="form-page">
+					<Logout />
+				</div>
+			</Router>
 	</React.StrictMode>
 );
 

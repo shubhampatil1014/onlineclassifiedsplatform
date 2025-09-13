@@ -1,4 +1,9 @@
+
+//Live
 const BASE_URL = "https://online-classifieds-platform.onrender.com";
+
+//Local
+// const BASE_URL = "http://localhost:8080";
 
 export async function getSessionInfo() {
     const response = await fetch(`${BASE_URL}/session-info`, {
@@ -72,7 +77,7 @@ export async function addToFavourites(id) {
     return data;
 }
 
-export async function getAllCateories() {
+export async function getAllCategories() {
     const response = await fetch(`${BASE_URL}/categories`);
     if (!response.ok) {
         throw new Error("Failed to fetch categories");
@@ -167,4 +172,37 @@ export async function getProductsByLocation(locationFilter) {
     }
     const products = await response.json();
     return products;
+}
+
+export async function getBrands(categoryId){
+    const response = await fetch(`${BASE_URL}/brands/${categoryId}`,{
+        method : "GET",
+        credentials : "include"
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch brands");
+    }
+    const brands = await response.json();
+    return brands;
+}
+
+export async function getModels(brand){
+    const response = await fetch(`${BASE_URL}/getModels/${brand}`,{
+        method : "GET",
+        credentials : "include"
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch brands");
+    }
+    const models = await response.json();
+    return models;
+}
+
+export async function uploadMedia(formData){
+    const response = await fetch(`${BASE_URL}/media/upload`,{
+        method : "POST",
+        body : formData,
+        credentials : "include"
+    });
+    return response.json(); 
 }
