@@ -1,12 +1,15 @@
 
 //Live
-const BASE_URL = "https://online-classifieds-platform.onrender.com";
+// const API_BASE_URL = "https://online-classifieds-platform.onrender.com";
 
 //Local
-// const BASE_URL = "http://localhost:8080";
+//const API_BASE_URL = "http://localhost:8080";
+
+import { API_BASE_URL } from "../config";
+
 
 export async function getSessionInfo() {
-    const response = await fetch(`${BASE_URL}/session-info`, {
+    const response = await fetch(`${API_BASE_URL}/session-info`, {
         method: "GET",
         credentials: "include", // ✅ send JSESSIONID cookie
     });
@@ -18,7 +21,7 @@ export async function getSessionInfo() {
 }
 
 export async function logout() {
-    const response = await fetch(`${BASE_URL}/logout`, {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
         method: "POST",
         credentials: "include", // ✅ send JSESSIONID cookie
     });
@@ -34,7 +37,7 @@ export async function authenticateUser(userName, password, loginType) {
     formData.append("password", password);
     formData.append("loginType", loginType);
 
-    const response = await fetch(`${BASE_URL}/authenticate`, {
+    const response = await fetch(`${API_BASE_URL}/authenticate`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -50,7 +53,7 @@ export async function authenticateUser(userName, password, loginType) {
 }
 
 export async function getAllProducts() {
-    const response = await fetch(`${BASE_URL}/getAllProducts`);
+    const response = await fetch(`${API_BASE_URL}/getAllProducts`);
     if (!response.ok) {
         throw new Error("Failed to fetch products");
     }
@@ -62,7 +65,7 @@ export async function addToFavourites(id) {
     const params = new URLSearchParams();
     params.append("productId", id);
 
-    const response = await fetch(`${BASE_URL}/addToFavourites`, {
+    const response = await fetch(`${API_BASE_URL}/addToFavourites`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -78,7 +81,7 @@ export async function addToFavourites(id) {
 }
 
 export async function getAllCategories() {
-    const response = await fetch(`${BASE_URL}/categories`);
+    const response = await fetch(`${API_BASE_URL}/categories`);
     if (!response.ok) {
         throw new Error("Failed to fetch categories");
     }
@@ -87,7 +90,7 @@ export async function getAllCategories() {
 }
 
 export async function getChats() {
-    const response = await fetch(`${BASE_URL}/chats`, {
+    const response = await fetch(`${API_BASE_URL}/chats`, {
         method: "GET",
         credentials: "include"
     });
@@ -99,7 +102,7 @@ export async function getChats() {
 }
 
 export async function getChatsByOwner(ownerId) {
-    const response = await fetch(`${BASE_URL}/chats/messages/${ownerId}`, {
+    const response = await fetch(`${API_BASE_URL}/chats/messages/${ownerId}`, {
         method: "GET",
         credentials: "include"
     });
@@ -111,7 +114,7 @@ export async function getChatsByOwner(ownerId) {
 }
 
 export async function getCustomerDetails(){
-    const response = await fetch(`${BASE_URL}/getCustomerDetails`,{
+    const response = await fetch(`${API_BASE_URL}/getCustomerDetails`,{
         method : "GET",
         credentials : "include"
     });
@@ -123,7 +126,7 @@ export async function getCustomerDetails(){
 }
 
 export async function getProductsByKeyword(keyword) {
-    const response = await fetch(`${BASE_URL}/products/getProductsByKeyword/${keyword}`);
+    const response = await fetch(`${API_BASE_URL}/products/getProductsByKeyword/${keyword}`);
     if (!response.ok) {
         throw new Error("Failed to fetch products By Keyword");
     }
@@ -133,7 +136,7 @@ export async function getProductsByKeyword(keyword) {
 }
 
 export async function getLocations(location) {
-    const response = await fetch(`${BASE_URL}/getLocations/${location}`);
+    const response = await fetch(`${API_BASE_URL}/getLocations/${location}`);
     if (!response.ok) {
         throw new Error("Failed to fetch locations");
     }
@@ -142,7 +145,7 @@ export async function getLocations(location) {
 }
 
 export async function getProductDetails(productId) {
-    const response = await fetch(`${BASE_URL}/products/${productId}`);
+    const response = await fetch(`${API_BASE_URL}/products/${productId}`);
     if (!response.ok) {
         throw new Error("Failed to fetch locations");
     }
@@ -151,7 +154,7 @@ export async function getProductDetails(productId) {
 }
 
 export async function getFavProducts() {
-    const response = await fetch(`${BASE_URL}/getFavProducts`, {
+    const response = await fetch(`${API_BASE_URL}/getFavProducts`, {
         method: "GET",
         credentials: "include", // ✅ send JSESSIONID cookie
     });
@@ -163,7 +166,7 @@ export async function getFavProducts() {
 }
 
 export async function getProductsByLocation(locationFilter) {
-    const response = await fetch(`${BASE_URL}/products/getProductsByLocation/${locationFilter}`, {
+    const response = await fetch(`${API_BASE_URL}/products/getProductsByLocation/${locationFilter}`, {
         method: "GET",
         credentials: "include", // ✅ send JSESSIONID cookie
     });
@@ -175,7 +178,7 @@ export async function getProductsByLocation(locationFilter) {
 }
 
 export async function getBrands(categoryId){
-    const response = await fetch(`${BASE_URL}/brands/${categoryId}`,{
+    const response = await fetch(`${API_BASE_URL}/brands/${categoryId}`,{
         method : "GET",
         credentials : "include"
     });
@@ -187,7 +190,7 @@ export async function getBrands(categoryId){
 }
 
 export async function getModels(brand){
-    const response = await fetch(`${BASE_URL}/getModels/${brand}`,{
+    const response = await fetch(`${API_BASE_URL}/models/${brand}`,{
         method : "GET",
         credentials : "include"
     });
@@ -195,11 +198,12 @@ export async function getModels(brand){
         throw new Error("Failed to fetch brands");
     }
     const models = await response.json();
+    console.log(models);
     return models;
 }
 
 export async function uploadMedia(formData){
-    const response = await fetch(`${BASE_URL}/media/upload`,{
+    const response = await fetch(`${API_BASE_URL}/media/upload`,{
         method : "POST",
         body : formData,
         credentials : "include"
