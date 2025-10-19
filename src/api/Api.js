@@ -210,3 +210,12 @@ export async function uploadMedia(formData){
     });
     return response.json(); 
 }
+
+export async function addProduct(data){
+    const response = await fetch(`${API_BASE_URL}/products/add`,{
+        method : "POST",
+        body : data,
+        credentials : "include"
+    });
+    return response.json(); 
+}

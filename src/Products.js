@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { addToFavourites, getAllProducts, getProductsByLocation } from "./api/Api.js";
 import { Link, useLocation } from "react-router-dom";
-import { authState } from "./config.js";
+import { authState, STATIC_CONTENT_PATH } from "./config.js";
 
 function Products() {
 
@@ -86,7 +86,7 @@ function Products() {
                         <div className='one' key={product.productId}>
                             <Link to={`/product/${product.productId}`}>
                                 <div className='pro-img' style={{
-                                    background: `url(images/${product.categoryName}.png) #eeebe6`,
+                                    background: `url(${STATIC_CONTENT_PATH}/media/images/${product.productImage}) #eeebe6`,
                                     backgroundSize: "260px 250px",
                                     backgroundRepeat: "no-repeat",
                                 }}></div>
@@ -129,7 +129,7 @@ function Products() {
                         (<div className='one' key={product.productId}>
                             <Link to={`/product/${product.productId}`}>
                                 <div className='pro-img' style={{
-                                    background: `url(images/${product.categoryName}.png) #eeebe6`,
+                                    background: `url(${STATIC_CONTENT_PATH}/media/images/${product.productImage}) #eeebe6`,
                                     backgroundSize: "260px 250px",
                                     backgroundRepeat: "no-repeat",
                                 }}></div>
@@ -185,7 +185,7 @@ function Products() {
                     <div className='one' key={product.productId}>
                         <Link to={`/product/${product.productId}`}>
                             <div className='pro-img' style={{
-                                background: `url(images/${product.categoryName}.png) #eeebe6`,
+                                background: `url(${STATIC_CONTENT_PATH}/media/images/${product.productImage}) #eeebe6`,
                                 backgroundSize: "260px 250px",
                                 backgroundRepeat: "no-repeat",
                             }}></div>

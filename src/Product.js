@@ -69,7 +69,7 @@ export default function Product() {
                 <div className="product-content"
                     style={{ flex: "2", display: "flex", gap: "20px", alignItems: "flex-start" }}>
                     <div className="product-image-box" style={{ flex: 1 }}>
-                        <img id="productImage" src={product.productImage ? `/images/${product.productImage}` : `/images/default.png`}
+                        <img id="productImage" src={product.productImage ? `${STATIC_CONTENT_PATH}/media/images/${product.productImage}` : `/images/${product.categoryName}.png`}
                             alt="Product"
                             style={{ maxWidth: "100%", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)" }} />
                     </div>

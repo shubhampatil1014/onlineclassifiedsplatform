@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getBrands, getModels } from "./api/Api";
+import { addProduct, getBrands, getModels } from "./api/Api";
 import { useParams } from "react-router-dom";
 
 const categoryFields = {
@@ -90,15 +90,20 @@ const AddProduct = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = {
-      categoryId,
-      brandId: brand,
-      modelId: model,
-      ...formData,
-    };
-    console.log("Submitted Product:", payload);
+    const data = new FormData();
+    data.append("categoryId", categoryId);
+    data.append("brandId", brand);
+    data.append("modelId", model);
+
+    // append other fields
+    Object.entries(formData).forEach(([key, value]) => {
+      data.append(key, value);
+    });
+
+    const response = await addProduct(data);
+    console.log("Response : ", response);
     alert("Product submitted ✅");
   };
 
@@ -393,13 +398,9 @@ const AddProduct = () => {
                       name="images"
                       accept="image/*"
                       multiple
-                      onChange={(e) => {
-                        const files = Array.from(e.target.files);
-                        setFormData((prev) => ({
-                          ...prev,
-                          images: files,
-                        }));
-                      }}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, images: e.target.files[0] }))
+                      }
                     />
 
                     {formData.images && formData.images.length > 0 && (
