@@ -219,3 +219,12 @@ export async function addProduct(data){
     });
     return response.json(); 
 }
+
+export async function getPostDetails(){
+    const response = await fetch(`${API_BASE_URL}/products/posts`,{
+        method : "GET",
+        credentials : "include"
+    });
+    console.log(response);
+    return response.json();
+}

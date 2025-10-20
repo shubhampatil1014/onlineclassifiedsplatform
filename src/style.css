@@ -1017,9 +1017,9 @@ table input[type=submit],input[name=close]{
 	cursor:pointer;
 }
 
-#users-post table th{
+/* #users-post table th{
 	min-width:180px !important;
-}
+} */
 
 
 

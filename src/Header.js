@@ -143,7 +143,7 @@ function Header() {
     }
   };
 
-  const openSellPage= () => {
+  const openSellPage = () => {
     if (authState && authState.isLoggedIn) {
       navigate("/sell"); // ✅ React way instead of window.location.href
     } else {
@@ -173,10 +173,10 @@ function Header() {
   const removeFilter = (event) => {
     const element = event.target;
     const params = new URLSearchParams(location.search);
-		params.delete(element.parentElement.className);
-    document.getElementById("locationName").innerHTML="";
-    element.parentElement.style.display="none";
-		navigate({ pathname: location.pathname, search: params.toString() });
+    params.delete(element.parentElement.className);
+    document.getElementById("locationName").innerHTML = "";
+    element.parentElement.style.display = "none";
+    navigate({ pathname: location.pathname, search: params.toString() });
   }
 
   return (
@@ -325,7 +325,9 @@ function Header() {
                       <div>Order Details</div>
                     </div>
                     <div>
-                      <div>Post Details</div>
+                      <Link to={`/myPosts`}>
+                        <div>Post Details</div>
+                      </Link>
                     </div>
                     <div>
                       <Link to={`/chats`}>

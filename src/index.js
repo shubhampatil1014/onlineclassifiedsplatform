@@ -17,6 +17,7 @@ import Chats from './Chats';
 import EditProfile from './EditProfile';
 import AddProduct from './AddProduct';
 import Sell from './Sell';
+import MyPosts from './MyPosts';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -36,6 +37,7 @@ root.render(
 						<Route path='/edit-profile' element={<EditProfile />} />
 						<Route path='/addproduct/:categoryId' element={<AddProduct />} />
 						<Route path='/sell' element={<Sell />} />
+						<Route path='/myPosts' element={<MyPosts/>}/>
 					</Routes>
 					<Footer />
 				</div>

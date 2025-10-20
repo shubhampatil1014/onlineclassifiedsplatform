@@ -165,11 +165,12 @@ const AddProduct = () => {
       default:
         return (
           <input
-            type={field.type}
+            type="text"
             name={field.name}
             placeholder={field.placeholder}
             value={formData[field.name] || ""}
             onChange={handleChange}
+            style={{height:"20px",width:"100px"}}
           />
         );
     }
@@ -377,13 +378,14 @@ const AddProduct = () => {
                   <td>
                     <label>Price</label>
                   </td>
-                  <td>
+                  <td>Rs. 
                     <input
-                      type="number"
+                      type="text"
                       name="price"
                       placeholder="Price"
                       value={formData.price || ""}
                       onChange={handleChange}
+                      style={{height:"20px",width:"150px",marginLeft:"5px"}}
                     />
                   </td>
                 </tr>
