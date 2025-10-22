@@ -228,3 +228,13 @@ export async function getPostDetails(){
     console.log(response);
     return response.json();
 }
+
+export async function getProductsBySearch(keyword){
+    const response = await fetch(`${API_BASE_URL}/products/getSearchedProducts/${keyword}`,{
+        method : "GET",
+        credentials : "include"
+    })
+    const data=response.json();
+    console.log("searched :" ,data);
+    return data;
+}

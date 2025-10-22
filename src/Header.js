@@ -4,7 +4,7 @@ import './Header.css';
 import logo from "./images/logo_7.png";
 import searchImg from "./images/search.png";
 import './theme.css';
-import { getAllCateories, getProductsByKeyword, getLocations, getSessionInfo, getAllCategories } from "./api/Api.js";
+import { getProductsByKeyword, getLocations, getSessionInfo, getAllCategories } from "./api/Api.js";
 import { authState } from './config.js';
 
 function Header() {
@@ -107,6 +107,8 @@ function Header() {
 
   const handleSelect = (id) => {
     console.log("Selected item:", id);
+    setSuggestions([]);
+    navigate(`/product/${id}`);
   };
 
   const selectedLocation = (locationFilter) => {
@@ -166,7 +168,7 @@ function Header() {
 
   const search = function () {
     if (searchQuery && searchQuery !== "") {
-      window.location.href = `search-results?keyword=${searchQuery}`;
+      navigate(`search-results/${searchQuery}`);
     }
   };
 

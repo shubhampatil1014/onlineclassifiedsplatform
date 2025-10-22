@@ -18,6 +18,7 @@ import EditProfile from './EditProfile';
 import AddProduct from './AddProduct';
 import Sell from './Sell';
 import MyPosts from './MyPosts';
+import SearchResults from './SearchResults';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -38,6 +39,7 @@ root.render(
 						<Route path='/addproduct/:categoryId' element={<AddProduct />} />
 						<Route path='/sell' element={<Sell />} />
 						<Route path='/myPosts' element={<MyPosts/>}/>
+						<Route path='/search-results/:keyword' element={<SearchResults/>}/>
 					</Routes>
 					<Footer />
 				</div>
