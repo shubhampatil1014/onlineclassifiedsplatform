@@ -61,6 +61,12 @@ export default function Login() {
     };
 
     return (
+        <>
+        <style>
+        {`
+        
+        `}            
+        </style>
         <div className="login" id="loginpage">
             <div className="form-container">
                 <div className="close">
@@ -180,5 +186,6 @@ export default function Login() {
                 </form>
             </div>
         </div>
+        </>
     );
 }

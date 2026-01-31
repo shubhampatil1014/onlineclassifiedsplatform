@@ -331,15 +331,23 @@ export default function Chats() {
                                 const mediaElement =
                                     message.mediaUrl && message.mediaUrl.length > 0 ? (
                                         <div>
-                                            <img
-                                                alt="media"
-                                                src={`${STATIC_CONTENT_PATH}/${message.mediaUrl}`}
-                                                width="200"
-                                                height="200"
-                                            />
+                                            {message.mediaUrl.toLowerCase().endsWith(".mp4") ? (
+                                                <video width="200" height="200" controls preload="metadata">
+                                                    <source
+                                                        src={`${STATIC_CONTENT_PATH}/${message.mediaUrl}`}
+                                                        type="video/mp4"
+                                                    />
+                                                </video>
+                                            ) : (
+                                                <img
+                                                    alt="media"
+                                                    src={`${STATIC_CONTENT_PATH}/${message.mediaUrl}`}
+                                                    width="200"
+                                                    height="200"
+                                                />
+                                            )}
                                         </div>
                                     ) : null;
-
                                 return message.isSent === "Y" ? (
                                     <div key={index} className="chat-message sent">
                                         {mediaElement}

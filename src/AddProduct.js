@@ -104,7 +104,7 @@ const AddProduct = () => {
 
     const response = await addProduct(data);
     console.log("Response : ", response);
-    alert("Product submitted ✅");
+    alert("status : ",response.status);
   };
 
   const fields = categoryFields[categoryKey] || [];
