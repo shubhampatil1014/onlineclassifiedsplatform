@@ -1,10 +1,3 @@
-
-//Live
-// const API_BASE_URL = "https://online-classifieds-platform.onrender.com";
-
-//Local
-//const API_BASE_URL = "http://localhost:8080";
-
 import { API_BASE_URL } from "../config";
 
 
@@ -22,7 +15,7 @@ export async function getSessionInfo() {
 
 export async function logout() {
     const response = await fetch(`${API_BASE_URL}/logout`, {
-        method: "POST",
+        method: "GET",
         credentials: "include", // ✅ send JSESSIONID cookie
     });
     if (!response.ok) {
@@ -236,5 +229,15 @@ export async function getProductsBySearch(keyword){
     })
     const data=response.json();
     console.log("searched :" ,data);
+    return data;
+}
+
+export async function isEmailExists(email){
+    const response = await fetch(`${API_BASE_URL}/isEmailExists`,{
+        method : "GET",
+        email : email,
+        credentials : "include"
+    })
+    const data=response.json();
     return data;
 }

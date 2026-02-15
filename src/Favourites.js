@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getFavProducts, addToFavourites } from "./api/Api";
+import { STATIC_CONTENT_PATH } from "./config";
 
 export default function Favourites() {
     const [favourites, setFavourites] = useState([]);
@@ -57,7 +58,7 @@ export default function Favourites() {
                                         <div
                                             className="pro-img"
                                             style={{
-                                                background: `url(images/${product.categoryName}.png) #eeebe6`,
+                                                background: `url(${STATIC_CONTENT_PATH}/media/images/${product.productImage}) #eeebe6`,
                                                 backgroundSize: "260px 250px",
                                                 backgroundRepeat: "no-repeat",
                                             }}
